@@ -1,0 +1,33 @@
+{
+    "version": 1,
+    "formatters": {
+      "simple": {
+        "format": "%(levelname)s%(asctime)s %(message)s"
+      },
+      "full": {
+        "format": "%(levelname)s%(asctime)s %(filename)s.%(funcName)s[%(lineno)d]: %(message)s"
+      }
+    },
+    "handlers": {
+      "console": {
+        "class": "logging.StreamHandler",
+        "formatter": "simple",
+        "stream": "ext://sys.stdout",
+        "level": "INFO"
+      },
+      "file": {
+        "class": "logging.handlers.RotatingFileHandler",
+        "formatter": "full",
+        "filename": "/var/log/app.log",
+        "mode": "a",
+        "maxBytes": 10485760,
+        "backupCount": 10,
+        "level": "DEBUG"
+      }
+    },
+    "root": {
+      "level": "DEBUG",
+      "handlers": ["console", "file"]
+    }
+  }
+  

@@ -1,0 +1,55 @@
+volumes:
+  neo4j-data:
+  neo4j-logs:
+
+services:
+  ner_app:
+    container_name: ner_app
+    build: .
+    volumes:
+    - ./app:/app:ro
+    - ${logs:-./data/logs}:/var/log:rw
+    environment:
+    - tabby_url=${tabby_url:-http://ner_llm:8080/}
+    - tabby_key=${tabby_key:-auth_cdf9d031b12341139775b3c68fb1395f}
+    - kg_url=${kg_url:-bolt://ner_kg:7687}
+    - kg_user=${kg_user:-neo4j}
+    - kg_password=${kg_password:-password}
+    ports:
+      - "9000:8000"
+    command: > 
+      uvicorn app.main:app 
+      --host 0.0.0.0
+  ner_kg:
+    container_name: ner_kg
+    image: neo4j:5.9
+    volumes:
+      - neo4j-data:/data
+      - neo4j-logs:/logs
+      - ${plugins:-./data/plugins}:/plugins
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/password
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+  ner_llm:
+    image: tabbyml/tabby
+    container_name: ner_llm
+    command: > 
+     serve 
+     --device cuda 
+     --chat-model SaigaGemma2-9B
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./models.json/:/data/models/TabbyML/models.json:ro
+      - ${models:-./data/models/}:/data/models/TabbyML:rw
+      - ./db:/data/ee:rw
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: ["gpu"]
