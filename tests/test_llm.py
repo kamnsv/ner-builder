@@ -4,8 +4,7 @@ import json
 
 import requests
 
-url_api = os.getenv('TEST_API', 'http://localhost:9000/api')
-
+url_api = os.getenv('TEST_API', 'http://localhost:9001/api')
 
 class TestLargeLanguageModelAPI(unittest.TestCase):
     

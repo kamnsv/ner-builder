@@ -1,9 +1,7 @@
 import logging
 from typing import Annotated
-import json
 from fastapi import APIRouter, Body, Query
 
-import cfg
 from ..router import Router
 from models import AnswerModel, RelationshipModel
 from llm import LargeLanguageModel

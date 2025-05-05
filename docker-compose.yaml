@@ -11,12 +11,12 @@ services:
     - ${logs:-./data/logs}:/var/log:rw
     - ${path_ner:-./data/ner}:/var/ner:rw
     environment:
-    - tabby_url=${tabby_url:-http://ner_llm:8080/}
-    - tabby_key=${tabby_key:-auth_cdf9d031b12341139775b3c68fb1395f}
+    - tabby_url=${tabby_url:-http://ner_llm:8080}
+    - tabby_key=${tabby_key}
     - kg_url=${kg_url:-bolt://ner_kg:7687}
     - kg_user=${kg_user:-neo4j}
     - kg_password=${kg_password:-password}
-    - STANZA_RESOURCES_DIR=/var/ner
+    - ner_path=/var/ner
     ports:
       - "${port_api:-9000}:8000"
     command: > 
@@ -54,7 +54,6 @@ services:
     volumes:
       - ./models.json/:/data/models/TabbyML/models.json:ro
       - ${models:-./data/models/}:/data/models/TabbyML:rw
-      - ./db:/data/ee:rw
     deploy:
       resources:
         reservations:
