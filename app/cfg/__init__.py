@@ -22,4 +22,3 @@ with open('/app/cfg/logger.json', 'r') as f:
         config['handlers']['console']['level'] = 'DEBUG'
     logging.config.dictConfig(config)
     logging.captureWarnings(True)
-    

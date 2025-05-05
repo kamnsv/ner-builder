@@ -1,2 +1,8 @@
 from .llm import LargeLanguageModelApi
-from .tabby import TabbyLLMAPI
+from llm import TabbyLLM
+
+
+class TabbyApi(LargeLanguageModelApi, TabbyLLM):
+    def __str__(self):
+        return 'LargeLanguageModelApi'
+    

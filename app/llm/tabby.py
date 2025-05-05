@@ -1,22 +1,23 @@
 import json
+import logging
 
 import aiohttp
 
-from .llm import LargeLanguageModelApi
-import cfg
+from .llm import LargeLanguageModel
+from cfg import tabby_url, tabby_key
 
 
-class TabbyLLMAPI(LargeLanguageModelApi):
+class TabbyLLM(LargeLanguageModel):
     
     headers = {
         'accept': '*/*',
-        'Authorization': f'Bearer {cfg.tabby_key}',
+        'Authorization': f'Bearer {tabby_key}',
         'Content-Type': 'application/json'
     }
-    url = cfg.tabby_url + '/v1/chat/completions'
+    url = tabby_url + '/v1/chat/completions'
     async def generate_answer(self, system_prompt: str, user_query: str) -> str:
-
-    
+        logging.debug(f"{system_prompt=}")
+        logging.debug(f"{user_query=}")
         data = {
             "model": "SaigaGemma2-9B",
             "temperature": 0,
@@ -32,7 +33,7 @@ class TabbyLLMAPI(LargeLanguageModelApi):
                 headers=self.headers,
                 json=data
             ) as response:
-                assert response.status == 200, f'Ошибка №{response.status} запроса к tabby {cfg.tabby_url}'
+                assert response.status == 200, f'Ошибка №{response.status} запроса к tabby {tabby_url}'
                 return self.build_answer(await response.text())
             
     def build_answer(self, text:str) -> str:
@@ -42,5 +43,6 @@ class TabbyLLMAPI(LargeLanguageModelApi):
             content = data.get('choices', [{}])[0].get('delta', {}).get('content', '')
             if content is not None:
                 answer += content
+        logging.debug(f"{answer=}")
         return answer
     
