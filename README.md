@@ -32,7 +32,7 @@ tabby_key=auth_...
 
 ## Тесты 
 
-- Для проведения тестов нужен `python => 3.10` с библиотекой `requests`
+- Для проведения тестов нужен `python => 3.10` с библиотекой `requests`.
 - Для запуска тестов, добавьте переменную `test_api` с адресом тестируемого API, по умолчанию `http://localhost:9000/api`.
 
 > Проверти версию `python` и наличие библиотеки `requests`:
@@ -57,7 +57,7 @@ python -m pip install requests
 # в PowerShell
 $env:TEST_API="http://localhost:9000/api"; python -m unittest discover -s tests -v 
 
-# в Linux/Mac
+# в Linux/macOS
 TEST_API=http://localhost:9000/api python -m unittest discover -s tests -v    
 или
 export TEST_API=http://localhost:9000/api && python3 -m unittest discover -s tests -v
