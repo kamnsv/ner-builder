@@ -8,55 +8,36 @@ services:
     build: .
     volumes:
     - ./app:/app:ro
-    - ${logs:-./data/logs}:/var/log:rw
+    - ${logs:-./data/logs}/app:/var/log:rw
     - ${path_ner:-./data/ner}:/var/ner:rw
+    - ${models:-./data/models}:/var/models:rw
     environment:
-    - tabby_url=${tabby_url:-http://ner_llm:8080}
-    - tabby_key=${tabby_key}
-    - kg_url=${kg_url:-bolt://ner_kg:7687}
+    - model_url=${model_url:-https://huggingface.co/Kamnsv/SaigaGemma2-9B-GGUF/resolve/main/model-00001-of-00001.gguf"}
+    - model_path=${model_path:-/var/models/SaigaGemma2-9B/ggml/model-00001-of-00001.gguf}
+    - kg_url=${kg_url:-bolt://ner_kg:}${port_bolt:-7687}
     - kg_user=${kg_user:-neo4j}
     - kg_password=${kg_password:-password}
-    - ner_path=/var/ner
+    - ner_path=${ner_path:-/var/ner}
+    - device=${device:-cpu}
+    - tabby_url=${tabby_url:-}
+    - tabby_key=${tabby_key:-}
+    - debug=${debug:-INFO}
     ports:
-      - "${port_api:-9000}:8000"
+      - "${port_api:-8000}:8000"
     command: > 
       uvicorn app.main:app 
       --host 0.0.0.0
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              capabilities: ["gpu"]
+
   ner_kg:
     container_name: ner_kg
     image: neo4j:5.9
     volumes:
       - neo4j-data:/data
-      - neo4j-logs:/logs
-      - ${plugins:-./data/plugins}:/plugins
+      - ${logs:-./data/logs}/kg:/logs
     ports:
-      - "7474:7474"
-      - "7687:7687"
+      - "${port_kg:-7474}:7474"
+      - "${port_bolt:-7687}:7687"
     environment:
-      - NEO4J_AUTH=neo4j/password
+      - NEO4J_AUTH=${kg_user:-neo4j}/${kg_password:-password}
       - NEO4J_PLUGINS=["apoc"]
       - NEO4J_dbms_security_procedures_unrestricted=apoc.*
-  ner_llm:
-    image: tabbyml/tabby
-    container_name: ner_llm
-    command: > 
-     serve 
-     --device cuda 
-     --chat-model ${tabby_model:-SaigaGemma2-9B}
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./models.json/:/data/models/TabbyML/models.json:ro
-      - ${models:-./data/models/}:/data/models/TabbyML:rw
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              capabilities: ["gpu"]

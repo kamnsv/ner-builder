@@ -10,14 +10,15 @@ class AnswerModel(BaseModel):
     @field_validator('text')
     @classmethod
     def text_cleaner(cls, value: str) -> str:
-        value = re.sub(r'[ \r\f\v\u00A0\xa0\ufeff]+', ' ', value)
-        return value.strip()  
+        text = re.sub(r'[ \r\f\v\u00A0\xa0\ufeff]+', ' ', value).strip()  
+        logging.debug(f"{text=}")
+        return text
     
     @property
     def json(self) -> dict:
         text = self.text.replace('```json', '')
         text = text.replace('```', '').strip()
         data = json.loads(text)
-        logging.debug(data)
+        logging.debug(f"json={data}")
         return data
     

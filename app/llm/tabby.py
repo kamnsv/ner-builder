@@ -5,7 +5,7 @@ import asyncio
 import aiohttp
 
 from .llm import LargeLanguageModel
-from cfg import tabby_url, tabby_key
+from cfg import tabby_url, tabby_key, seed
 
 
 class TabbyLLM(LargeLanguageModel):
@@ -24,6 +24,9 @@ class TabbyLLM(LargeLanguageModel):
         data = {
             "model": "SaigaGemma2-9B",
             "temperature": 0,
+            "seed": seed,     
+            "top_p" :1.0,   
+            "top_k": 1,     
             "messages": [
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_query}

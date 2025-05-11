@@ -9,7 +9,7 @@ import stanza.resources.common
 
 from ..router import Router
 from models import EntityModel
-from cfg import path_ner
+from cfg import path_ner, device, stanza_local
 
 class NamedEntityRecognitionApi(Router):
     
@@ -17,11 +17,11 @@ class NamedEntityRecognitionApi(Router):
     ners = {}
     for lang in langs:
         try:
-            ners[lang] = stanza.Pipeline(lang, use_gpu=True, device='cuda', dir=path_ner)
+            ners[lang] = stanza.Pipeline(lang, use_gpu=('cuda'==device), device=device, dir=path_ner, download_method=stanza_local)
         except:                                    
             logging.info(f'Language {lang} not found. Downloading...')
             stanza.download(lang)
-            ners[lang] = stanza.Pipeline(lang, use_gpu=True, device='cuda', dir=path_ner)
+            ners[lang] = stanza.Pipeline(lang, use_gpu=('cuda'==device), device=device, dir=path_ner, download_method=stanza_local)
             
     def lemmatize_entity(self, entity_text, lang) -> str:
         lemmas = []

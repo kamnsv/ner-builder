@@ -4,7 +4,7 @@ from .router import Router
 from cfg import api as url_api
 
 from .ner import NamedEntityRecognitionApi
-from .llm import TabbyApi
+from .llm import LLMApi
 from .kg import KnowledgeGraphApi
 
 class Routers:
@@ -27,7 +27,7 @@ class Routers:
     
         return {
             'kg':  kg,
-            'llm': TabbyApi(),
+            'llm': LLMApi(),
             'ner': NamedEntityRecognitionApi(),
         } 
    

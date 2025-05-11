@@ -5,35 +5,31 @@
 
 Проект предназначен для построения графа знаний из текста при помощи локальной LLM.
 
-В проекте используется open source проект [Tabby](https://github.com/TabbyML/tabby), который запускает API для обращения к квантованным LLM в формате GGUF.
-
-> По умолчанию Tabby использует GPU, поэтому рекомендуеться запускать на устройствах с VRAM от **8Gb** с поддержкой CUDA.
-
 Основное решение в виде документированного API (swagger). 
 
 ## Запуск
+
+При необходимости переопределения переменных окружений скопируйте `example.env` в `.env`.
+
+Для запуска контейнеров введите:
 
 ```
 docker-compose up -d
 ```
 
-> При запуске Tabby загружает и проверяет hash языковых моделей. Общий объем моделей ~**5.5Gb**, поэтому запуск сопровождается с некоторой задержкой.
+Будет поднято 2 контейнера: 
 
-Для работы языковой модели Tabby, необходимо зарегистрироваться в web-интерфейсе (по умолчанию http://localhost:8080/), а потом взять Token.
-Создайте `.env` и поместите туда переменную окружения `tabby_key`. 
+1. `ner_app` логика приложения на Python (FastAPI).
+2. `ner_kg` графовая база данных Neo4j.
 
-По итогу `.env` содержит:
-
-```
-tabby_key=auth_...
-```
+После первого запуска загрузятся все необходимые модели. Можно перевести работу в автономный режим, указав `stanza_local=True`.
 
 > После внесения правок в `.env` следует перезапустить `docker-compose up -d`.
 
 ## Тесты 
 
 - Для проведения тестов нужен `python => 3.10` с библиотекой `requests`.
-- Для запуска тестов, добавьте переменную `test_api` с адресом тестируемого API, по умолчанию `http://localhost:9000/api`.
+- Для запуска тестов, добавьте переменную `test_api` с адресом тестируемого API, по умолчанию `http://localhost:8000/api`.
 
 > Проверти версию `python` и наличие библиотеки `requests`:
 
@@ -55,15 +51,15 @@ python -m pip install requests
 
 ```
 # в PowerShell
-$env:TEST_API="http://localhost:9000/api"; python -m unittest discover -s tests -v 
+$env:TEST_API="http://localhost:8000/api"; python -m unittest discover -s tests -v 
 
 # в Linux/macOS
-TEST_API=http://localhost:9000/api python -m unittest discover -s tests -v    
+TEST_API=http://localhost:8000/api python -m unittest discover -s tests -v    
 или
-export TEST_API=http://localhost:9000/api && python3 -m unittest discover -s tests -v
+export TEST_API=http://localhost:8000/api && python3 -m unittest discover -s tests -v
 
 # в cmd     
-set TEST_API=http://localhost:9000/api
+set TEST_API=http://localhost:8000/api
 python -m unittest discover -s tests -v  
 ```
 
@@ -71,8 +67,8 @@ python -m unittest discover -s tests -v
 
 ## Основные компоненты
 
-![](docs/uml.png)
+![](docs/umls/uml.png)
 
-1. Основное приложение на Python (FastAPI).
-2. Tabby-сервис с локальной большой языковой моделью.
-3. Графовая база данных Neo4j.
+1. [Граф знаний](docs/kg.md)
+2. [Языковая модель и особенности тестирования](docs/llm.md)
+3. [Распознавание именованных сущностей](docs/ner.md)

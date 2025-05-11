@@ -5,7 +5,7 @@ import json
 
 import requests
 
-url_api = os.getenv('TEST_API', 'http://localhost:9000/api')
+url_api = os.getenv('TEST_API', 'http://localhost:8000/api')
 
 
 class TestKnownledgeGraphAPI(unittest.TestCase):
