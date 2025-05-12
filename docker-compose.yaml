@@ -21,10 +21,9 @@ services:
     - tabby_url=${tabby_url:-}
     - tabby_key=${tabby_key:-}
     - debug=${debug:-INFO}
-    - seed=${seed:0}
-
+    - seed=${seed:-0}
     ports:
-      - "${port_api:-9000}:8000"
+      - "${port_api:-8000}:8000"
     command: > 
       uvicorn app.main:app 
       --host 0.0.0.0
