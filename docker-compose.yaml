@@ -1,6 +1,5 @@
 volumes:
   neo4j-data:
-  neo4j-logs:
 
 services:
   ner_app:

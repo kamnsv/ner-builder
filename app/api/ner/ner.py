@@ -17,12 +17,12 @@ class NamedEntityRecognitionApi(Router):
     ners = {}
     for lang in langs:
         try:
-            ners[lang] = stanza.Pipeline(lang, use_gpu=('cuda'==device), device=device, dir=path_ner, download_method=stanza_local)
+            ners[lang] = stanza.Pipeline(lang, use_gpu=('cuda'==device), device=device, dir=path_ner)
         except:                                    
             logging.info(f'Language {lang} not found. Downloading...')
             stanza.download(lang)
-            ners[lang] = stanza.Pipeline(lang, use_gpu=('cuda'==device), device=device, dir=path_ner, download_method=stanza_local)
-            
+            ners[lang] = stanza.Pipeline(lang, use_gpu=('cuda'==device), device=device, dir=path_ner)
+    
     def lemmatize_entity(self, entity_text, lang) -> str:
         lemmas = []
         doc = self.ners[lang].process(entity_text)
