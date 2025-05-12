@@ -3,7 +3,6 @@ from fastapi import FastAPI
 from .router import Router
 from cfg import api as url_api
 
-from .ner import NamedEntityRecognitionApi
 from .llm import LLMApi
 from .kg import KnowledgeGraphApi
 
@@ -28,6 +27,5 @@ class Routers:
         return {
             'kg':  kg,
             'llm': LLMApi(),
-            'ner': NamedEntityRecognitionApi(),
         } 
    

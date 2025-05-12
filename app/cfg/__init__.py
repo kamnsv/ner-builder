@@ -18,9 +18,7 @@ kg_pswd = os.getenv('kg_password','password')
 title     = os.getenv('title','Graph knowledge creator')
 desc      = os.getenv('desc','Builder graph knowledge')
 debug     = bool(os.getenv('debug', 'DEBUG'))
-path_ner  = os.getenv("ner_path")
 device  = os.getenv("device", 'cuda')
-stanza_local  = [True, None][bool(os.getenv("stanza_local", ''))] 
 seed = int(os.getenv("seed", '0'))
 
 random.seed(seed)
