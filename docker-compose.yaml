@@ -11,7 +11,7 @@ services:
     - ${path_ner:-./data/ner}:/var/ner:rw
     - ${models:-./data/models}:/var/models:rw
     environment:
-    - model_url=${model_url:-https://huggingface.co/Kamnsv/SaigaGemma2-9B-GGUF/resolve/main/model-00001-of-00001.gguf"}
+    - model_url=${model_url:-https://huggingface.co/Kamnsv/SaigaGemma2-9B-GGUF/resolve/main/model-00001-of-00001.gguf}
     - model_path=${model_path:-/var/models/SaigaGemma2-9B/ggml/model-00001-of-00001.gguf}
     - kg_url=${kg_url:-bolt://ner_kg:}${port_bolt:-7687}
     - kg_user=${kg_user:-neo4j}
@@ -22,7 +22,7 @@ services:
     - tabby_key=${tabby_key:-}
     - debug=${debug:-INFO}
     ports:
-      - "${port_api:-8000}:8000"
+      - "${port_api:-9000}:8000"
     command: > 
       uvicorn app.main:app 
       --host 0.0.0.0

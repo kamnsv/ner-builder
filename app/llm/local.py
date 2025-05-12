@@ -23,6 +23,7 @@ class LocalLLM(LargeLanguageModel):
     def __init__(self, *args, **kwargs):
         if not os.path.exists(model_path):
             logging.info(f"Скачивание модели из {model_url} в {model_path}")
+            os.makedirs(os.path.dirname(model_path), exist_ok=True)
             urllib.request.urlretrieve(model_url, model_path)
 
         cpu_total = os.cpu_count()
