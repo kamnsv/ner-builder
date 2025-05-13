@@ -33,10 +33,10 @@ docker-compose up -d
 
 ```
 python -V
-> 3.10
+>= 3.11
 
 python -m pip freeze | grep requests
-> requests=>2.*
+> requests>=2.*
 ```
 
 В случае отсутствия установите библиотеку `requests`:
