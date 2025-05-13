@@ -80,7 +80,7 @@ class TestLargeLanguageModelAPI(unittest.TestCase):
                     "object_type": "LOCATION"
                 }
             ]
-            response = requests.post(url+'ru', headers=headers, data=test_text)
+            response = requests.post(url+'ru', headers=headers, data=test_text.encode('utf-8'))
             self.assertEqual(response.status_code, 200, 
                             f"Expected status 200, got {response.status_code}. Response: {response.text}")
             self.assertEqual({tuple(sorted(e.items())) for e in json.loads(response.text)},
